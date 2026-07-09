@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>NailControl</title>
+    <img src="iconos/icon-180.png"class="logo">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+   
+
+</head>
+
+<body>
+
+    <div class="contenedor">
+
+        <h1>💅 MIS GANANCIAS 🏆</h1>
+
+        <div class="tarjeta">
+            <h3>💵Ingresos Hoy</h3>
+            <p id="hoy">$0</p>
+        </div>
+
+        <div class="tarjeta">
+            <h3>📈Ingresos Semana</h3>
+            <p id="semana">$0</p>
+        </div>
+
+        <div class="tarjeta">
+            <h3>🏆Ingresos Mes</h3>
+            <p id="mes">$0</p>
+        </div>
+        <div class="tarjeta">
+    <h3>📅 Resumen por Día</h3>
+    <ul id="resumenDiario"></ul>
+</div>
+
+        <button onclick="mostrarFormulario()">
+            ➕ Nuevo Servicio
+        </button>
+
+        <div id="formulario" class="oculto">
+
+       <select id="servicio" onchange="actualizarMonto()">
+
+    <option value="">Seleccione un servicio</option>
+
+    <option value="Manicure Permanente">
+        Manicure Permanente
+    </option>
+
+    <option value="Pedicure Permanente">
+        Pedicure Permanente
+    </option>
+
+    <option value="Manicure Ruso">
+        Manicure Ruso
+    </option>
+
+    <option value="Baño de Gel">
+        Baño de Gel
+    </option>
+
+    <option value="Soft Gel">
+        Soft Gel
+    </option>
+
+    <option value="Poly Gel">
+        Poly Gel
+    </option>
+
+    <option value="Manicure">
+        Manicure
+    </option>
+
+    <option value="Pedicure">
+        Pedicure
+    </option>
+
+</select>
+ <h4>✨ Adicionales</h4>
+
+<label>
+    <input type="checkbox" class="adicional"
+        value="Diseño Sencillo"
+        data-precio="4000"
+        onchange="actualizarMonto()">
+    Diseño Sencillo (+$4.000)
+</label>
+
+<br>
+
+<label>
+    <input type="checkbox" class="adicional"
+        value="Diseño Medio"
+        data-precio="8000"
+        onchange="actualizarMonto()">
+    Diseño Medio (+$8.000)
+</label>
+
+<br>
+
+<label>
+    <input type="checkbox" class="adicional"
+        value="Diseño Premium"
+        data-precio="10000"
+        onchange="actualizarMonto()">
+    Diseño Premium (+$10.000)
+</label>
+
+<br>
+
+<label>
+    <input type="checkbox" class="adicional"
+        value="Francesas"
+        data-precio="8000"
+        onchange="actualizarMonto()">
+    Francesas (+$8.000)
+</label>
+
+<br>
+
+<label>
+    <input type="checkbox" class="adicional"
+        value="Ojo de Gato"
+        data-precio="6000"
+        onchange="actualizarMonto()">
+    Ojo de Gato (+$6.000)
+</label>
+
+            <input
+    type="number"
+    id="monto"
+    placeholder="Comisión 40%"
+    readonly>
+
+            <button onclick="guardarServicio()">
+                Guardar
+            </button>
+
+        </div>
+<div class="tarjeta">
+
+    <h3>🔎 Filtrar historial</h3>
+
+    <label for="filtroFecha">Fecha:</label>
+
+    <input
+        type="date"
+        id="filtroFecha"
+        onchange="actualizarPantalla()">
+
+    <button onclick="limpiarFiltro()">
+        Mostrar Todo
+    </button>
+
+</div>
+        <h2>Historial</h2>
+
+        <ul id="listaServicios"></ul>
+
+    </div>
+<div id="modalEliminar" class="modal oculto">
+
+    <div class="modal-contenido">
+
+        <h2>🗑️ Eliminar servicio</h2>
+
+        <p>
+            ¿Estás seguro de eliminar este registro?
+        </p>
+
+        <div class="botones-modal">
+
+            <button
+                class="cancelar"
+                onclick="cerrarModal()">
+                Cancelar
+            </button>
+
+            <button
+                class="eliminar"
+                onclick="confirmarEliminar()">
+                Eliminar
+            </button>
+            
+
+        </div>
+
+    </div>
+
+</div>
+<!-- Botón opciones -->
+<button onclick="mostrarOpciones()" class="boton-opciones">
+    ⚙️ Opciones
+</button>
+
+
+<!-- Menú de opciones -->
+<div id="opciones" class="opciones oculto">
+
+    <button onclick="exportarDatos()">
+        📤 Exportar respaldo
+    </button>
+
+
+    <label class="boton-importar">
+
+        📥 Importar respaldo
+
+        <input 
+        type="file"
+        id="archivoImportar"
+        accept=".json"
+        onchange="importarDatos(event)">
+
+    </label>
+
+
+</div>
+<!-- Modal Exportar -->
+<div id="modalExportar" class="modal oculto">
+
+    <div class="modal-contenido">
+
+        <h2>📂 Crear respaldo</h2>
+
+        <p>
+            Ingresa el nombre del archivo:
+        </p>
+
+
+        <input 
+        type="text"
+        id="nombreArchivo"
+        value="NailControl_Respaldo"
+        class="input-modal">
+
+
+        <div class="botones-modal">
+
+
+            <button 
+            class="cancelar"
+            onclick="cerrarModalExportar()">
+                Cancelar
+            </button>
+
+
+            <button 
+            class="eliminar"
+            onclick="confirmarExportar()">
+                Exportar
+            </button>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+
+</html>
