@@ -11,6 +11,8 @@ const preciosServicios = {
     "Poly Gel": 38000,
     "Manicure": 11000,
     "Pedicure": 18000
+    "Retiro Sencillo": 5000
+    "Retiro Gel o Acrilico": 10000
 
 };
 function mostrarFormulario(){
