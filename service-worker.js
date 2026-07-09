@@ -1,4 +1,4 @@
-const CACHE_NAME = "nails-control-v1";
+const CACHE_NAME = "nails-control-v2";
 
 const archivos = [
     "./",
