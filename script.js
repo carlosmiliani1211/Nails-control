@@ -81,9 +81,23 @@ function guardarServicio(){
 
     const servicio =
         document.getElementById("servicio").value;
+    let monto;
 
-    const monto =
-        Number(document.getElementById("monto").value);
+const precioEspecial = document.getElementById("modoManual").checked;
+const descuento10 = document.getElementById("descuento10").checked;
+
+if (precioEspecial) {
+    monto = Number(document.getElementById("precioManual").value);
+} else {
+    monto = Number(document.getElementById("monto").value);
+
+    if (descuento10) {
+        monto = monto * 0.9;
+    }
+}
+
+   
+
 if(idEditando){
 
     const registro =
@@ -101,11 +115,11 @@ if(idEditando){
 
     // Limpiar formulario
     document.getElementById("servicio").value = "";
-    document.getElementById("monto").value = "";
-    document.getElementById("descuento10").checked = false;
-    document.getElementById("precioManual").value = "";
+document.getElementById("monto").value = "";
+document.getElementById("descuento10").checked = false;
+
 document.getElementById("modoManual").checked = false;
-document.getElementById("contenedorManual").classList.add("oculto");
+cambiarModoManual();
 
     document.querySelectorAll(".adicional").forEach(item => {
         item.checked = false;
@@ -138,6 +152,7 @@ document.getElementById("contenedorManual").classList.add("oculto");
     numeroCliente,
     servicio,
     descuento10: document.getElementById("descuento10").checked,
+    precioEspecial: document.getElementById("precioEspecial").checked,
     monto,
     fecha: new Date()
 };
