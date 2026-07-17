@@ -81,20 +81,22 @@ function guardarServicio(){
 
     const servicio =
         document.getElementById("servicio").value;
+
     let monto;
 
-const precioEspecial = document.getElementById("modoManual").checked;
-const descuento10 = document.getElementById("descuento10").checked;
+    const modoManual = document.getElementById("modoManual").checked;
+    const descuento10 = document.getElementById("descuento10").checked;
 
-if (precioEspecial) {
-    monto = Number(document.getElementById("precioManual").value);
-} else {
-    monto = Number(document.getElementById("monto").value);
+    if (modoManual) {
+        monto = Number(document.getElementById("precioManual").value);
+    } else {
+        monto = Number(document.getElementById("monto").value);
 
-    if (descuento10) {
-        monto = monto * 0.9;
+        if (descuento10) {
+            monto = monto * 0.9;
+        }
     }
-}
+
 
    
 
