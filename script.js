@@ -152,7 +152,7 @@ cambiarModoManual();
     numeroCliente,
     servicio,
     descuento10: document.getElementById("descuento10").checked,
-    precioEspecial: document.getElementById("precioEspecial").checked,
+   precioEspecial: document.getElementById("modoManual").checked,
     monto,
     fecha: new Date()
 };
