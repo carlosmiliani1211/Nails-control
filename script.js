@@ -134,7 +134,7 @@ cambiarModoManual();
         item.checked = false;
     });
 
-    mostrarFormulario();
+    
     actualizarPantalla();
 
     return;
@@ -185,7 +185,7 @@ document.querySelectorAll(".adicional").forEach(item => {
     item.checked = false;
 });
 
-mostrarFormulario();
+
 actualizarPantalla();
     
 function abrirModalEliminar(id){
