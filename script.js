@@ -468,7 +468,6 @@ li.innerHTML = `
 <strong>👤 Cliente #${item.numeroCliente}</strong><br>
 <strong>💅 Servicio:</strong> ${item.servicio}<br>
 ${item.descuento10 ? "<strong>🎁 Descuento:</strong> 10%<br>" : ""}
-<strong>💰 Comisión:</strong> $${item.monto.toLocaleString('es-CL')}
 <strong>💰 Monto:</strong> $${item.monto.toLocaleString('es-CL')}
 <button onclick="editarServicio(${item.id})">
     ✏️ Editar
