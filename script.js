@@ -1,6 +1,7 @@
 let servicios = JSON.parse(localStorage.getItem("servicios")) || [];
 let idEditando = null;
 let idEliminar = null;
+
 const preciosServicios = {
 
     "Manicure Permanente": 18000,
@@ -13,9 +14,12 @@ const preciosServicios = {
     "Pedicure": 18000,
     "Retiro sencillo": 5000,
     "Retiro Gel o Acrilico": 10000,
-    "Reparacion de uña": 3000,
+    "Reparacion de uña": 3000
 
 };
+
+
+// Mostrar / ocultar formulario
 function mostrarFormulario(){
 
     const formulario =
@@ -26,176 +30,293 @@ function mostrarFormulario(){
     }else{
         formulario.classList.add("oculto");
     }
+
 }
+
+
+// Calcula comisión 40% desde servicios de lista
 function actualizarMonto(){
 
     const servicio =
         document.getElementById("servicio").value;
 
-    let totalLocal = 0;
+    let precio = 0;
+
 
     if(preciosServicios[servicio]){
-        totalLocal = preciosServicios[servicio];
+        precio = preciosServicios[servicio];
     }
+
 
     const adicionales =
         document.querySelectorAll(".adicional:checked");
 
+
     adicionales.forEach(item => {
 
-        totalLocal += Number(item.dataset.precio);
+        precio += Number(item.dataset.precio);
 
     });
-const descuento =
-    document.getElementById("descuento10").checked;
 
-if(descuento){
-    totalLocal = totalLocal * 0.90;
-}
+
+    const descuento =
+        document.getElementById("descuento10").checked;
+
+
+    if(descuento){
+
+        precio = precio * 0.90;
+
+    }
+
+
     const comision =
-        Math.round(totalLocal * 0.40);
+        Math.round(precio * 0.40);
+
 
     document.getElementById("monto").value =
         comision;
+
 }
+
+
+
+// Editar servicio
 function editarServicio(id){
 
     const servicioEditar =
         servicios.find(item => item.id === id);
 
+
     if(!servicioEditar){
         return;
     }
 
+
     document.getElementById("servicio").value =
         servicioEditar.servicio;
 
-    actualizarMonto();
 
     document.getElementById("monto").value =
         servicioEditar.monto;
 
+
     idEditando = id;
+
 }
+
+
+
+// Guardar servicio
 function guardarServicio(){
+
 
     const servicio =
         document.getElementById("servicio").value;
 
-   let precioBase;
 
-const modoManual = document.getElementById("modoManual").checked;
-const descuento10 = document.getElementById("descuento10").checked;
+    const modoManual =
+        document.getElementById("modoManual").checked;
 
-// Obtener precio base
-if (modoManual) {
-    precioBase = Number(document.getElementById("precioManual").value);
-} else {
-    precioBase = Number(document.getElementById("monto").value);
-}
 
-// Aplicar descuento tienda
-if (descuento10) {
-    precioBase = precioBase * 0.9;
-}
+    const descuento10 =
+        document.getElementById("descuento10").checked;
 
-// Calcular ganancia 40%
-const monto = precioBase * 0.4;
-   
 
-if(idEditando){
 
-    const registro =
-        servicios.find(item => item.id === idEditando);
+    let precioCliente = 0;
 
-    registro.servicio = servicio;
-    registro.monto = monto;
 
-    localStorage.setItem(
-        "servicios",
-        JSON.stringify(servicios)
-    );
 
-    idEditando = null;
+    // Precio ingresado manualmente
+    if(modoManual){
 
- // Limpiar formulario
-document.getElementById("servicio").value = "";
-document.getElementById("monto").value = "";
+        precioCliente =
+            Number(
+                document.getElementById("precioManual").value
+            );
 
-document.getElementById("descuento10").checked = false;
+    }
 
-document.getElementById("modoManual").checked = false;
-document.getElementById("precioManual").value = "";
+    // Precio seleccionado desde lista
+    else{
 
-cambiarModoManual();
+        precioCliente = 0;
 
-    document.querySelectorAll(".adicional").forEach(item => {
-        item.checked = false;
-    });
 
-    mostrarFormulario();
-    actualizarPantalla();
+        if(preciosServicios[servicio]){
 
-    return;
-}
-    const hoy =
-        new Date().toLocaleDateString("es-CL");
+            precioCliente =
+                preciosServicios[servicio];
 
-    const clientesHoy =
-        servicios.filter(item => {
+        }
 
-            const fechaRegistro =
-                new Date(item.fecha)
-                .toLocaleDateString("es-CL");
 
-            return fechaRegistro === hoy;
+        document
+        .querySelectorAll(".adicional:checked")
+        .forEach(item => {
+
+            precioCliente +=
+            Number(item.dataset.precio);
 
         });
 
-    const numeroCliente =
-        clientesHoy.length + 1;
+    }
 
- const nuevoServicio = {
-    id: Date.now(),
-    numeroCliente,
-    servicio,
-    descuento10: document.getElementById("descuento10").checked,
-   precioEspecial: document.getElementById("modoManual").checked,
-    monto,
-    fecha: new Date()
-};
 
-    servicios.push(nuevoServicio);
-    localStorage.setItem(
-        "servicios",
-        JSON.stringify(servicios)
-    );
 
-    // Limpiar formulario después de guardar nuevo registro
-document.getElementById("servicio").value = "";
-document.getElementById("monto").value = "";
-document.getElementById("descuento10").checked = false;
-document.getElementById("modoManual").checked = false;
-document.getElementById("precioManual").value = "";
+    // Aplicar descuento tienda
+    if(descuento10){
 
-cambiarModoManual();
+        precioCliente =
+            precioCliente * 0.90;
 
-document.querySelectorAll(".adicional").forEach(item => {
-    item.checked = false;
-});
+    }
 
-mostrarFormulario();
-actualizarPantalla();
-} 
+
+
+    // Ganancia siempre 40%
+    const monto =
+        Math.round(precioCliente * 0.40);
+
+
+
+    // Editar registro existente
+    if(idEditando){
+
+
+        const registro =
+            servicios.find(item => item.id === idEditando);
+
+
+
+        registro.servicio = servicio;
+        registro.monto = monto;
+
+
+        localStorage.setItem(
+            "servicios",
+            JSON.stringify(servicios)
+        );
+
+
+        idEditando = null;
+
+
+    }
+
+
+
+    // Nuevo registro
+    else{
+
+
+        const hoy =
+            new Date().toLocaleDateString("es-CL");
+
+
+        const clientesHoy =
+            servicios.filter(item => {
+
+
+                const fechaRegistro =
+                    new Date(item.fecha)
+                    .toLocaleDateString("es-CL");
+
+
+                return fechaRegistro === hoy;
+
+
+            });
+
+
+
+        const numeroCliente =
+            clientesHoy.length + 1;
+
+
+
+        const nuevoServicio = {
+
+            id: Date.now(),
+
+            numeroCliente,
+
+            servicio,
+
+            descuento10,
+
+            precioEspecial: modoManual,
+
+            precioCliente,
+
+            monto,
+
+            fecha: new Date()
+
+        };
+
+
+
+        servicios.push(nuevoServicio);
+
+
+        localStorage.setItem(
+            "servicios",
+            JSON.stringify(servicios)
+        );
+
+
+    }
+
+
+
+    // Limpiar formulario
+
+    document.getElementById("servicio").value = "";
+
+    document.getElementById("monto").value = "";
+
+    document.getElementById("precioManual").value = "";
+
+    document.getElementById("descuento10").checked = false;
+
+    document.getElementById("modoManual").checked = false;
+
+
+
+    cambiarModoManual();
+
+
+
+    document
+    .querySelectorAll(".adicional")
+    .forEach(item => {
+
+        item.checked = false;
+
+    });
+
+
+
+    actualizarPantalla();
+
+}
+// ===============================
+// ELIMINAR SERVICIOS
+// ===============================
+
 function abrirModalEliminar(id){
 
     idEliminar = id;
+
 
     document
     .getElementById("modalEliminar")
     .classList.remove("oculto");
 
 }
+
 
 
 function cerrarModal(){
@@ -207,9 +328,12 @@ function cerrarModal(){
 }
 
 
+
 function confirmarEliminar(){
 
-    servicios = servicios.filter(
+
+    servicios =
+    servicios.filter(
         item => item.id !== idEliminar
     );
 
@@ -222,22 +346,38 @@ function confirmarEliminar(){
 
     idEliminar = null;
 
+
     actualizarPantalla();
+
 
     cerrarModal();
 
 }
 
 
+
+// ===============================
+// MENU OPCIONES
+// ===============================
+
 function mostrarOpciones(){
 
     const opciones =
         document.getElementById("opciones");
 
+
     opciones.classList.toggle("oculto");
 
 }
+
+
+
+// ===============================
+// EXPORTAR RESPALDO
+// ===============================
+
 function exportarDatos(){
+
 
     document
     .getElementById("nombreArchivo")
@@ -264,113 +404,71 @@ function cerrarModalExportar(){
 
 function confirmarExportar(){
 
+
     let nombreArchivo =
-    document.getElementById("nombreArchivo").value.trim();
-
-
-    if(nombreArchivo === ""){
-
-        nombreArchivo = "NailControl_Respaldo";
-
-    }
-
-
-    nombreArchivo =
-    nombreArchivo.replace(/[\/\\:*?"<>|]/g,"");
-
-
-    const datos =
-    JSON.stringify(servicios,null,2);
-
-
-    const blob =
-    new Blob([datos],{
-        type:"application/json"
-    });
-
-
-    const url =
-    URL.createObjectURL(blob);
-
-
-    const enlace =
-    document.createElement("a");
-
-
-    enlace.href = url;
-
-    enlace.download =
-    nombreArchivo + ".json";
-
-
-    document.body.appendChild(enlace);
-
-    enlace.click();
-
-
-    document.body.removeChild(enlace);
-
-
-    URL.revokeObjectURL(url);
-
-
-    cerrarModalExportar();
-
-}
-
-
-function cerrarModalExportar(){
-
     document
-    .getElementById("modalExportar")
-    .classList.add("oculto");
+    .getElementById("nombreArchivo")
+    .value
+    .trim();
 
-}
-
-
-
-function confirmarExportar(){
-
-    let nombreArchivo =
-    document.getElementById("nombreArchivo").value.trim();
 
 
     if(nombreArchivo === ""){
 
-        nombreArchivo = "NailControl_Respaldo";
+        nombreArchivo =
+        "NailControl_Respaldo";
 
     }
 
 
+
     nombreArchivo =
-    nombreArchivo.replace(/[\/\\:*?"<>|]/g,"");
+    nombreArchivo.replace(
+        /[\/\\:*?"<>|]/g,
+        ""
+    );
+
 
 
     const datos =
-    JSON.stringify(servicios,null,2);
+    JSON.stringify(
+        servicios,
+        null,
+        2
+    );
+
 
 
     const blob =
-    new Blob([datos],{
-        type:"application/json"
-    });
+    new Blob(
+        [datos],
+        {
+            type:"application/json"
+        }
+    );
+
 
 
     const url =
     URL.createObjectURL(blob);
 
 
+
     const enlace =
     document.createElement("a");
 
 
+
     enlace.href = url;
+
 
     enlace.download =
     nombreArchivo + ".json";
 
 
+
     document.body.appendChild(enlace);
+
 
     enlace.click();
 
@@ -381,282 +479,497 @@ function confirmarExportar(){
     URL.revokeObjectURL(url);
 
 
+
     cerrarModalExportar();
 
 }
+
+
+
+// ===============================
+// IMPORTAR RESPALDO
+// ===============================
+
 function importarDatos(event){
 
-    const archivo = event.target.files[0];
+
+    const archivo =
+    event.target.files[0];
+
+
 
     if(!archivo){
+
         return;
+
     }
 
-    const lector = new FileReader();
+
+
+    const lector =
+    new FileReader();
+
+
 
     lector.onload = function(e){
 
+
         try{
 
-            const datos = JSON.parse(e.target.result);
+
+            const datos =
+            JSON.parse(
+                e.target.result
+            );
+
+
 
             servicios = datos;
+
+
 
             localStorage.setItem(
                 "servicios",
                 JSON.stringify(servicios)
             );
 
+
+
             actualizarPantalla();
 
-            alert("Respaldo restaurado correctamente.");
 
-        }catch(error){
 
-            alert("El archivo no es válido.");
+            alert(
+                "Respaldo restaurado correctamente."
+            );
+
+
+
+        }
+        catch(error){
+
+
+            alert(
+                "El archivo no es válido."
+            );
+
+
             console.error(error);
+
 
         }
 
+
     };
+
+
 
     lector.readAsText(archivo);
 
-}
-function cerrarModal(){
-
-    document
-        .getElementById("modalEliminar")
-        .classList.add("oculto");
 
 }
-function confirmarEliminar(){
-
-    servicios = servicios.filter(
-        item => item.id !== idEliminar
-    );
-
-
-    localStorage.setItem(
-        "servicios",
-        JSON.stringify(servicios)
-    );
-
-
-    idEliminar = null;
-
-
-    actualizarPantalla();
-
-
-    cerrarModal();
-
-}
-
-    actualizarPantalla();
+// ===============================
+// LIMPIAR FILTRO
+// ===============================
 
 function limpiarFiltro(){
 
-    document.getElementById("filtroFecha").value = "";
+    document
+    .getElementById("filtroFecha")
+    .value = "";
+
 
     actualizarPantalla();
 
 }
 
+
+
+// ===============================
+// ACTUALIZAR PANTALLA
+// ===============================
+
 function actualizarPantalla(){
 
+
     const lista =
-        document.getElementById("listaServicios");
+    document.getElementById("listaServicios");
+
 
     lista.innerHTML = "";
 
+
+
     let total = 0;
+
+
+
     const fechaFiltro =
-        document.getElementById("filtroFecha").value;
+    document
+    .getElementById("filtroFecha")
+    .value;
 
-    servicios.forEach((item, index) => {
 
- if (fechaFiltro) {
 
-    const fechaServicio = new Date(item.fecha);
+    servicios.forEach(item => {
 
-    const año = fechaServicio.getFullYear();
-    const mes = String(fechaServicio.getMonth() + 1).padStart(2, "0");
-    const dia = String(fechaServicio.getDate()).padStart(2, "0");
 
-    const fechaFormateada = `${año}-${mes}-${dia}`;
 
-    if (fechaFormateada !== fechaFiltro) {
-        return;
-    }
-}
+        if(fechaFiltro){
+
+
+            const fechaServicio =
+            new Date(item.fecha);
+
+
+
+            const fechaFormateada =
+            `${fechaServicio.getFullYear()}-${String(fechaServicio.getMonth()+1).padStart(2,"0")}-${String(fechaServicio.getDate()).padStart(2,"0")}`;
+
+
+
+            if(fechaFormateada !== fechaFiltro){
+
+                return;
+
+            }
+
+        }
+
 
 
         total += item.monto;
 
+
+
+        const fecha =
+        new Date(item.fecha);
+
+
+
         const li =
-            document.createElement("li");
+        document.createElement("li");
 
-        const fecha = new Date(item.fecha);
 
-li.innerHTML = `
+
+        li.innerHTML = `
+
 <strong>📅 Fecha:</strong> ${fecha.toLocaleDateString('es-CL')}<br>
+
 <strong>🕒 Hora:</strong> ${fecha.toLocaleTimeString('es-CL')}<br>
+
 <strong>👤 Cliente #${item.numeroCliente}</strong><br>
+
 <strong>💅 Servicio:</strong> ${item.servicio}<br>
-<strong>💰 Monto:</strong> $${item.monto.toLocaleString('es-CL')}<br><br>
-${item.descuento10 ? "<strong>🎁 Descuento:</strong> 10%<br>" : ""}
+
+<strong>💰 Ganancia:</strong> $${item.monto.toLocaleString('es-CL')}<br>
+
+${item.descuento10 ? "🎁 Descuento 10% aplicado<br>" : ""}
+
+<br>
+
 <button onclick="editarServicio(${item.id})">
-    ✏️ Editar
+✏️ Editar
 </button>
+
+
 <button onclick="abrirModalEliminar(${item.id})">
-    🗑️ Eliminar
+🗑️ Eliminar
 </button>
 
 `;
+
+
+
         lista.appendChild(li);
 
+
+
     });
-const resumenPorDia = {};
 
-servicios.forEach(item => {
 
-    const fecha = new Date(item.fecha)
-        .toLocaleDateString('es-CL');
 
-    if (!resumenPorDia[fecha]) {
-        resumenPorDia[fecha] = 0;
-    }
+    // INGRESO SEGÚN FILTRO
 
-    resumenPorDia[fecha] += item.monto;
-});
-
-const listaResumen =
-    document.getElementById("resumenDiario");
-
-listaResumen.innerHTML = "";
-
-for (const fecha in resumenPorDia) {
-
-    const li = document.createElement("li");
-
-    li.innerHTML =
-        `📅 ${fecha} - 💰 $${resumenPorDia[fecha].toLocaleString('es-CL')}`;
-
-    listaResumen.appendChild(li);
-}
-    // INGRESO DEL DÍA (según calendario seleccionado)
-document.getElementById("hoy").textContent =
+    document
+    .getElementById("hoy")
+    .textContent =
     `$${total.toLocaleString('es-CL')}`;
 
 
-// INGRESO SEMANAL (semana actual)
-const fechaActual = new Date();
-
-const inicioSemana = new Date(fechaActual);
-inicioSemana.setDate(
-    fechaActual.getDate() - fechaActual.getDay() + 1
-);
-inicioSemana.setHours(0,0,0,0);
-
-const finSemana = new Date(inicioSemana);
-finSemana.setDate(inicioSemana.getDate() + 6);
-finSemana.setHours(23,59,59,999);
 
 
-let totalSemana = 0;
 
-servicios.forEach(item => {
+    // SEMANA ACTUAL
 
-    const fechaServicio = new Date(item.fecha);
-
-    if (
-        fechaServicio >= inicioSemana &&
-        fechaServicio <= finSemana
-    ) {
-        totalSemana += item.monto;
-    }
-
-});
+    const fechaActual =
+    new Date();
 
 
-document.getElementById("semana").textContent =
+
+    const inicioSemana =
+    new Date(fechaActual);
+
+
+
+    inicioSemana.setDate(
+        fechaActual.getDate()
+        -
+        fechaActual.getDay()
+        +
+        1
+    );
+
+
+
+    inicioSemana.setHours(
+        0,0,0,0
+    );
+
+
+
+    const finSemana =
+    new Date(inicioSemana);
+
+
+
+    finSemana.setDate(
+        inicioSemana.getDate()+6
+    );
+
+
+
+    finSemana.setHours(
+        23,59,59,999
+    );
+
+
+
+    let totalSemana = 0;
+
+
+
+    servicios.forEach(item =>{
+
+
+        const fecha =
+        new Date(item.fecha);
+
+
+
+        if(
+            fecha >= inicioSemana &&
+            fecha <= finSemana
+        ){
+
+            totalSemana += item.monto;
+
+        }
+
+
+    });
+
+
+
+    document
+    .getElementById("semana")
+    .textContent =
     `$${totalSemana.toLocaleString('es-CL')}`;
 
 
-// INGRESO MENSUAL (mes actual)
-const mesActual = fechaActual.getMonth();
-const añoActual = fechaActual.getFullYear();
-
-let totalMes = 0;
-
-servicios.forEach(item => {
-
-    const fechaServicio = new Date(item.fecha);
-
-    if (
-        fechaServicio.getMonth() === mesActual &&
-        fechaServicio.getFullYear() === añoActual
-    ) {
-        totalMes += item.monto;
-    }
-
-});
 
 
-document.getElementById("mes").textContent =
+
+    // MES ACTUAL
+
+
+    let totalMes = 0;
+
+
+    servicios.forEach(item =>{
+
+
+        const fecha =
+        new Date(item.fecha);
+
+
+
+        if(
+            fecha.getMonth()
+            === fechaActual.getMonth()
+            &&
+            fecha.getFullYear()
+            === fechaActual.getFullYear()
+        ){
+
+            totalMes += item.monto;
+
+        }
+
+
+    });
+
+
+
+    document
+    .getElementById("mes")
+    .textContent =
     `$${totalMes.toLocaleString('es-CL')}`;
+
+
+
 }
-window.onload = function () {
-    actualizarPantalla();
-}
+
+
+
+
+// ===============================
+// MODO PRECIO MANUAL
+// ===============================
+
 function cambiarModoManual(){
 
+
     const manual =
-        document.getElementById("modoManual").checked;
+    document
+    .getElementById("modoManual")
+    .checked;
+
+
 
     const contenedor =
-        document.getElementById("contenedorManual");
+    document
+    .getElementById("contenedorManual");
+
+
 
     if(manual){
 
-        contenedor.classList.remove("oculto");
 
-        document.getElementById("servicio").disabled = true;
+        contenedor
+        .classList
+        .remove("oculto");
 
-        document.querySelectorAll(".adicional")
-            .forEach(item => item.disabled = true);
 
-        document.getElementById("descuento10").disabled = true;
 
-        document.getElementById("monto").value = "";
+        document
+        .getElementById("servicio")
+        .disabled = true;
 
-    }else{
 
-        contenedor.classList.add("oculto");
 
-        document.getElementById("servicio").disabled = false;
+        document
+        .querySelectorAll(".adicional")
+        .forEach(item => {
 
-        document.querySelectorAll(".adicional")
-            .forEach(item => item.disabled = false);
+            item.disabled = true;
 
-        document.getElementById("descuento10").disabled = false;
+        });
 
-        document.getElementById("precioManual").value = "";
+
+
+        // Si usa precio manual,
+        // no aplica descuento 10%
+
+        document
+        .getElementById("descuento10")
+        .disabled = true;
+
+
+
+        document
+        .getElementById("monto")
+        .value = "";
+
+
+    }
+
+    else{
+
+
+        contenedor
+        .classList
+        .add("oculto");
+
+
+
+        document
+        .getElementById("servicio")
+        .disabled = false;
+
+
+
+        document
+        .querySelectorAll(".adicional")
+        .forEach(item => {
+
+            item.disabled = false;
+
+        });
+
+
+
+        document
+        .getElementById("descuento10")
+        .disabled = false;
+
+
+
+        document
+        .getElementById("precioManual")
+        .value = "";
+
+
 
         actualizarMonto();
 
     }
 
+
 }
+
+
+
+
+// ===============================
+// CALCULAR PRECIO MANUAL
+// ===============================
+
 function calcularManual(){
 
+
     const precio =
-        Number(document.getElementById("precioManual").value);
+    Number(
+        document
+        .getElementById("precioManual")
+        .value
+    );
+
+
 
     const comision =
-        Math.round(precio * 0.40);
+    Math.round(
+        precio * 0.40
+    );
 
-    document.getElementById("monto").value = comision;
+
+
+    document
+    .getElementById("monto")
+    .value =
+    comision;
+
 
 }
+
+
+
+
+
+// CARGA INICIAL
+
+window.onload = function(){
+
+    actualizarPantalla();
+
+};
