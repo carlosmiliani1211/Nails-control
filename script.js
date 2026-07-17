@@ -573,3 +573,53 @@ document.getElementById("mes").textContent =
 window.onload = function () {
     actualizarPantalla();
 }
+function cambiarModoManual(){
+
+    const manual =
+        document.getElementById("modoManual").checked;
+
+    const contenedor =
+        document.getElementById("contenedorManual");
+
+    if(manual){
+
+        contenedor.classList.remove("oculto");
+
+        document.getElementById("servicio").disabled = true;
+
+        document.querySelectorAll(".adicional")
+            .forEach(item => item.disabled = true);
+
+        document.getElementById("descuento10").disabled = true;
+
+        document.getElementById("monto").value = "";
+
+    }else{
+
+        contenedor.classList.add("oculto");
+
+        document.getElementById("servicio").disabled = false;
+
+        document.querySelectorAll(".adicional")
+            .forEach(item => item.disabled = false);
+
+        document.getElementById("descuento10").disabled = false;
+
+        document.getElementById("precioManual").value = "";
+
+        actualizarMonto();
+
+    }
+
+}
+function calcularManual(){
+
+    const precio =
+        Number(document.getElementById("precioManual").value);
+
+    const comision =
+        Math.round(precio * 0.40);
+
+    document.getElementById("monto").value = comision;
+
+}
