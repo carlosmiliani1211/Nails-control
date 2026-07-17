@@ -118,12 +118,15 @@ if(idEditando){
 
     idEditando = null;
 
-    // Limpiar formulario
-    document.getElementById("servicio").value = "";
+ // Limpiar formulario
+document.getElementById("servicio").value = "";
 document.getElementById("monto").value = "";
+
 document.getElementById("descuento10").checked = false;
 
 document.getElementById("modoManual").checked = false;
+document.getElementById("precioManual").value = "";
+
 cambiarModoManual();
 
     document.querySelectorAll(".adicional").forEach(item => {
@@ -168,11 +171,22 @@ cambiarModoManual();
         JSON.stringify(servicios)
     );
 
-    document.getElementById("servicio").value = "";
-    document.getElementById("monto").value = "";
+    // Limpiar formulario después de guardar nuevo registro
+document.getElementById("servicio").value = "";
+document.getElementById("monto").value = "";
+document.getElementById("descuento10").checked = false;
+document.getElementById("modoManual").checked = false;
+document.getElementById("precioManual").value = "";
 
-    actualizarPantalla();
-}
+cambiarModoManual();
+
+document.querySelectorAll(".adicional").forEach(item => {
+    item.checked = false;
+});
+
+mostrarFormulario();
+actualizarPantalla();
+    
 function abrirModalEliminar(id){
 
     idEliminar = id;
