@@ -84,19 +84,21 @@ function guardarServicio(){
 
     let monto;
 
-    const modoManual = document.getElementById("modoManual").checked;
-    const descuento10 = document.getElementById("descuento10").checked;
+const modoManual = document.getElementById("modoManual").checked;
+const descuento10 = document.getElementById("descuento10").checked;
 
-    if (modoManual) {
-        monto = Number(document.getElementById("precioManual").value);
-    } else {
-        monto = Number(document.getElementById("monto").value);
+if (modoManual) {
 
-        if (descuento10) {
-            monto = monto * 0.9;
-        }
+    monto = Number(document.getElementById("precioManual").value);
+
+} else {
+
+    monto = Number(document.getElementById("monto").value);
+
+    if (descuento10) {
+        monto = monto * 0.9;
     }
-
+}
 
    
 
