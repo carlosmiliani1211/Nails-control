@@ -90,6 +90,26 @@
 <option value="Reparacion de uña">
     Reparacion de uña
 </option>
+<label>
+    <input
+        type="checkbox"
+        id="modoManual"
+        onchange="cambiarModoManual()">
+
+    🎯 Precio especial / Promoción
+</label>
+
+<br><br>
+<label>
+<input
+    type="checkbox"
+    id="modoManual"
+    onchange="cambiarModoManual()">
+
+    ✏️ Ingresar monto manualmente
+</label>
+
+<br><br>
            
 </select>
  <h4>✨ Adicionales</h4>
@@ -151,7 +171,19 @@
 </label>
 
 <br><br>
+<div id="contenedorManual" class="oculto">
 
+    <label>💲 Precio cobrado al cliente</label>
+
+    <input
+        type="number"
+        id="precioManual"
+        placeholder="Ingrese el precio"
+        oninput="calcularManual()">
+
+    <br><br>
+
+</div>
             <input
     type="number"
     id="monto"
