@@ -13,6 +13,7 @@ const preciosServicios = {
     "Pedicure": 18000,
     "Retiro sencillo": 5000,
     "Retiro Gel o Acrilico": 10000,
+    "Reparacion de uñas": 3000,
 
 };
 function mostrarFormulario(){
