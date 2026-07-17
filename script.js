@@ -90,7 +90,8 @@ const descuento10 = document.getElementById("descuento10").checked;
 // Obtener precio base
 if (modoManual) {
     precioBase = Number(document.getElementById("precioManual").value);
-} else {
+} 
+else {
     precioBase = Number(document.getElementById("monto").value);
 }
 
@@ -631,7 +632,8 @@ function cambiarModoManual(){
 
         document.getElementById("monto").value = "";
 
-    }else{
+    }
+    else{
 
         contenedor.classList.add("oculto");
 
