@@ -130,8 +130,8 @@ if(idEditando){
     const numeroCliente =
         clientesHoy.length + 1;
 
-    const nuevoServicio = {
-    id: Date.now(),      // ID único
+ const nuevoServicio = {
+    id: Date.now(),
     numeroCliente,
     servicio,
     descuento10: document.getElementById("descuento10").checked,
@@ -467,6 +467,8 @@ li.innerHTML = `
 <strong>🕒 Hora:</strong> ${fecha.toLocaleTimeString('es-CL')}<br>
 <strong>👤 Cliente #${item.numeroCliente}</strong><br>
 <strong>💅 Servicio:</strong> ${item.servicio}<br>
+${item.descuento10 ? "<strong>🎁 Descuento:</strong> 10%<br>" : ""}
+<strong>💰 Comisión:</strong> $${item.monto.toLocaleString('es-CL')}
 <strong>💰 Monto:</strong> $${item.monto.toLocaleString('es-CL')}
 <button onclick="editarServicio(${item.id})">
     ✏️ Editar
