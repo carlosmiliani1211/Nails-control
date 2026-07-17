@@ -467,8 +467,10 @@ li.innerHTML = `
 <strong>🕒 Hora:</strong> ${fecha.toLocaleTimeString('es-CL')}<br>
 <strong>👤 Cliente #${item.numeroCliente}</strong><br>
 <strong>💅 Servicio:</strong> ${item.servicio}<br>
+
 ${item.descuento10 ? "<strong>🎁 Descuento:</strong> 10%<br>" : ""}
-<strong>💰 Monto:</strong> $${item.monto.toLocaleString('es-CL')}
+
+<strong>💰 Monto:</strong> $${item.monto.toLocaleString('es-CL')}<br><br
 <button onclick="editarServicio(${item.id})">
     ✏️ Editar
 </button>
