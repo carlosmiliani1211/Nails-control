@@ -103,6 +103,9 @@ if(idEditando){
     document.getElementById("servicio").value = "";
     document.getElementById("monto").value = "";
     document.getElementById("descuento10").checked = false;
+    document.getElementById("precioManual").value = "";
+document.getElementById("modoManual").checked = false;
+document.getElementById("contenedorManual").classList.add("oculto");
 
     document.querySelectorAll(".adicional").forEach(item => {
         item.checked = false;
