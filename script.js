@@ -82,24 +82,25 @@ function guardarServicio(){
     const servicio =
         document.getElementById("servicio").value;
 
-    let monto;
+   let precioBase;
 
 const modoManual = document.getElementById("modoManual").checked;
 const descuento10 = document.getElementById("descuento10").checked;
 
+// Obtener precio base
 if (modoManual) {
-
-    monto = Number(document.getElementById("precioManual").value);
-
+    precioBase = Number(document.getElementById("precioManual").value);
 } else {
-
-    monto = Number(document.getElementById("monto").value);
-
-    if (descuento10) {
-        monto = monto * 0.9;
-    }
+    precioBase = Number(document.getElementById("monto").value);
 }
 
+// Aplicar descuento tienda
+if (descuento10) {
+    precioBase = precioBase * 0.9;
+}
+
+// Calcular ganancia 40%
+const monto = precioBase * 0.4;
    
 
 if(idEditando){
