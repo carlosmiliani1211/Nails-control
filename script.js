@@ -642,9 +642,8 @@ function cambiarModoManual(){
 
         document.getElementById("descuento10").disabled = false;
 
-        document.getElementById("precioManual").value = "";
-
-        actualizarMonto();
+       document.getElementById("precioManual").value = "";
+document.getElementById("monto").value = "";
 
     }
 
