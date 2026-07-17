@@ -90,8 +90,7 @@ const descuento10 = document.getElementById("descuento10").checked;
 // Obtener precio base
 if (modoManual) {
     precioBase = Number(document.getElementById("precioManual").value);
-} 
-else {
+} else {
     precioBase = Number(document.getElementById("monto").value);
 }
 
@@ -134,7 +133,7 @@ cambiarModoManual();
         item.checked = false;
     });
 
-    
+    mostrarFormulario();
     actualizarPantalla();
 
     return;
@@ -185,7 +184,7 @@ document.querySelectorAll(".adicional").forEach(item => {
     item.checked = false;
 });
 
-
+mostrarFormulario();
 actualizarPantalla();
     
 function abrirModalEliminar(id){
@@ -632,8 +631,7 @@ function cambiarModoManual(){
 
         document.getElementById("monto").value = "";
 
-    }
-    else{
+    }else{
 
         contenedor.classList.add("oculto");
 
@@ -644,9 +642,9 @@ function cambiarModoManual(){
 
         document.getElementById("descuento10").disabled = false;
 
-   document.getElementById("precioManual").value = "";
+       document.getElementById("precioManual").value = "";
+document.getElementById("monto").value = "";
 
-actualizarMonto();
     }
 
 }
