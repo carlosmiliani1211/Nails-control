@@ -186,7 +186,7 @@ document.querySelectorAll(".adicional").forEach(item => {
 
 mostrarFormulario();
 actualizarPantalla();
-    
+} 
 function abrirModalEliminar(id){
 
     idEliminar = id;
