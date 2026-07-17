@@ -46,7 +46,12 @@ function actualizarMonto(){
         totalLocal += Number(item.dataset.precio);
 
     });
+const descuento =
+    document.getElementById("descuento10").checked;
 
+if(descuento){
+    totalLocal = totalLocal * 0.90;
+}
     const comision =
         Math.round(totalLocal * 0.40);
 
@@ -97,6 +102,7 @@ if(idEditando){
     // Limpiar formulario
     document.getElementById("servicio").value = "";
     document.getElementById("monto").value = "";
+    document.getElementById("descuento10").checked = false;
 
     document.querySelectorAll(".adicional").forEach(item => {
         item.checked = false;
@@ -128,6 +134,7 @@ if(idEditando){
     id: Date.now(),      // ID único
     numeroCliente,
     servicio,
+    descuento10: document.getElementById("descuento10").checked,
     monto,
     fecha: new Date()
 };
